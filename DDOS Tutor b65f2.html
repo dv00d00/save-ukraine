@@ -1,0 +1,786 @@
+<html><head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Fight for Ukraine: DDOS Tutorial</title>
+	<link rel="icon" type="image/x-icon" href="favicon.ico">
+	
+	<style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+}
+
+.simple-table-header {
+	background: rgb(247, 246, 243);
+	color: black;
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-opaquegray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="ded6f5e0-1534-47c6-a35e-0620dbf26c93" class="page sans"><header><h1 class="page-title">DDOS Tutorial</h1></header><div class="page-body"><p id="dcd30d4c-ff46-441c-bc3b-5e78d5a9b30f" class=""><strong><mark class="highlight-red">IMPORTANT!</mark></strong></p><p id="0750d5ac-f610-4ded-bda1-919adbbfe402" class="">
+</p><p id="444b0a58-1ff2-4da8-8ca6-796ea119d185" class=""> Before starting any DDOS attack, you need to connect a VPN, which will need to be changed periodically!
+• Do not attack single targets, watch Telegram channels that attack others, and just join. So we have more chances to &quot;put enemy sites to sleep&quot;.
+• Glory to Ukraine!
+• Russian warship, go nah * y!</p><p id="1bb80dbe-58d3-4f5a-8a1a-db37f5dfdc80" class="">
+</p><p id="27d7a1c4-788b-45ce-8ac8-7579d59ab2b8" class=""><strong>Content</strong></p><p id="793c5968-b858-413b-9487-b6bbb4527899" class="">How do I connect a VPN?</p><p id="93da7f0a-9d34-436d-9008-11188a743f1b" class="">How to check if your IP address has changed?</p><p id="04169d09-7c8c-4fa5-aa12-eef9f8876313" class="">Attack: mega simple level</p><p id="43e2cba3-5f70-405a-b73c-4425ba5aae1d" class="">Attack: simple level</p><p id="fe4fae32-39f0-4fd3-bc04-25c8af197317" class="">Attack: Intermediate</p><p id="367177fb-09ca-40d0-8dfc-68442413ea28" class="">Attack: advanced level</p><p id="f0aaf938-44ea-4b74-a528-3545a6b13eca" class="">Check the result of DDOS attacks</p><p id="6cc2f0d9-86e1-4213-b974-0b6ddd2a6866" class="">Additional resources</p><p id="bec67644-08fb-4c12-85db-30075b5f1cb3" class="">Afterword
+</p><p id="bbce39c2-0e78-43cc-ba4d-d1c59a6e076a" class=""><strong>How do I connect a VPN?</strong>
+The easiest and most effective way is to use ready-made programs that you can download to your computer and change your location with one click.
+If you know of other ways to change your IP address or set up a VPN, you can use them, however.
+The following is a list of such programs and links to them.
+Just download, install, choose any country (in some cases it is advisable to use IP-addresses of Russia, in some European or American IP, it all depends on the task).
+I advise you to download 2-3 programs. Because it happens that one of the programs begins to fake.
+Warning! I advise you to use Hotspot Shield as the main program to change your IP address, now it is the best choice.</p><p id="4f9ed84e-2755-401c-9a21-b473961f4593" class="">
+</p><ol type="1" id="36aa635e-8138-49cf-8931-e7c945f9c947" class="numbered-list" start="1"><li><a href="https://www.hotspotshield.com">Hotspot Shield</a></li></ol><p id="a60fa556-0b46-4de0-abf8-4fa33e2ec5ab" class="">Currently, there is a promotion for Ukrainians: Premium tariff for one month. Just register and download the program. If the promotion is no longer valid, then just choose the Premium tariff, subscribe for 1 month, connect a virtual card (you can with 0 balance) and use the Premium version for 1 week. Then do not forget to disable the card, so as not to write off the subscription fee.</p><ol type="1" id="11b9cb70-6d63-4701-97b5-4a509922d62d" class="numbered-list" start="2"><li><a href="https://www.f-secure.com/en/home/login">F-SecureFreedome
+</a></li></ol><p id="d99abf7c-2e42-4b3f-93e4-91945f383815" class="">Here we register and continue to download the Freedome program. Now she is
+available for free for Ukrainians for 30 days.</p><p id="6645c38a-867b-4b38-a642-8929fa18e64c" class="">
+</p><ol type="1" id="370868fd-d666-427e-bcea-f945c9d3929a" class="numbered-list" start="3"><li><a href="https://www.urban-vpn.com">UrbanVPN</a></li></ol><p id="3f7472a8-d067-47e6-bd7f-602502845845" class="">Completely free. Option for those who do not want to steam for a long time
+VPN settings.</p><p id="ded45f75-d421-4944-a56d-dcd20cf9a5da" class="">
+</p><ol type="1" id="fda2a86a-9fbd-46eb-8da2-eef62cc06b58" class="numbered-list" start="4"><li><a href="https://clearvpn.com">ClearVPN</a></li></ol><p id="8a03ce96-41a7-4e2a-a3a8-d1343c75bef7" class="">Made a promo for Ukrainians (SAVEUKRAINE) with six months of free access. Because of this, most Ukrainians began to use it and it began to rise very much. So now I advise you to use other programs.</p><p id="9ead341a-a650-461b-b809-00ecf7ab13eb" class="">
+</p><ol type="1" id="ec6b1c29-2b38-4017-9deb-1a1866ca616c" class="numbered-list" start="5"><li><a href="https://rus.windscribe.com/download">Windscribe</a></li></ol><p id="f006df46-f87f-4d94-be9b-17cd8da7882c" class="">Paid. And that&#x27;s it. You can find free best
+alternatives. I do not recommend.</p><p id="752bfad5-7bab-490f-8ede-fa59f7cce88a" class="">
+</p><ol type="1" id="f9b7a014-1648-42d1-9d4c-e91f2fcbe25b" class="numbered-list" start="6"><li><a href="https://www.keepsolid.com">KeepSolidVPNUnlimited</a></li></ol><p id="619381cf-7438-4a45-b428-7b71a21bf367" class="">Similar to ClearVPN. They did a promo for Ukrainians with a six-month subscription, which, unfortunately, I can&#x27;t even find now (who wants to use this VPN - google it). Due to this, strong lags are possible. I do not recommend using this program at this time.</p><p id="f3b587bd-dddf-4307-a46e-e0b1f2bf5b93" class="">
+</p><p id="4a05ac67-d2b8-4f86-9bfe-3221e6731516" class="">How to check if your IP address has changed
+Importantly! After you set up and run the VPN, you need to check whether your address has really changed (there are cases when the service fakes or changes the address to the wrong country that you chose).
+Here is a link where you can check your current location:</p><p id="f8482c72-c10b-406b-adba-d29ae4a91c2c" class=""><a href="https://2ip.me/en/">version 1</a></p><p id="bba2c86a-3770-40b0-8349-6f84c9d64b8e" class=""><a href="https://mylocation.org">version 2</a></p><p id="d7a99d98-0f12-4277-90bb-4ac59ab1229b" class=""><a href="https://www.dnsleaktest.com">version 3</a></p><p id="36cf9a11-9832-441e-86e6-1bc0d4620768" class="">
+</p><p id="91fa5469-0309-4103-ab78-22db64a82abb" class=""><strong>Attack: mega simple level
+</strong>For those who do not want to bother, there is a list of sites and programs that can simply be opened and they themselves will carry out attacks on certain sites. Just follow the instructions on the site and beyond.
+Importantly! Don&#x27;t forget about the enabled VPN, which needs to be changed from time to time.
+As an alternative to VPN, you can download Tor Browser from this <a href="https://www.torproject.org/ru/">link</a>, after downloading it, open the tab with the sites listed below and enjoy the attacks on Russian sites. Each time you log in to the browser, your IP will change. Warning! The program from point 4 has installed proxies under the hood, so it is not advisable to download Tor Browser.</p><p id="9c607518-bc1a-4e81-965d-8e2486397ebf" class="">
+</p><ol type="1" id="ebe0d74c-f8c3-4f90-9429-48a45e5b78b5" class="numbered-list" start="1"><li><a href="http://www.lookquizru.xyz/">http://www.lookquizru.xyz/</a>
+Attacks one of the sites that is relevant at the moment (site to attack
+dynamically changing).
+The site was developed by the KiberBULL team. Links to their Telegram-
+channel.
+Importantly! Don&#x27;t forget the enabled VPN, which you need to change from time to time, or Tor Browser, which you need to change from time to time!</li></ol><ol type="1" id="f911f7fa-2e70-4877-9ab0-79036c1e4ad6" class="numbered-list" start="2"><li><a href="https://2022pollquizinru.xyz/">https://2022pollquizinru.xyz/</a>
+Attacks the standard list of Russian sites.
+Another site developed by the KiberBULL team. Links to their Telegram channel.
+Importantly! Don&#x27;t forget the enabled VPN, which you need to change from time to time, or Tor Browser, which you need to change from time to time!</li></ol><ol type="1" id="02c659b2-aed2-4af2-8de0-f1fc7a52b256" class="numbered-list" start="3"><li><a href="https://help-ukraine-win.com/">https://help-ukraine-win.com/</a>
+Attacks a list of sites that are dynamically changing on their own
+using a proxy. All you need to do is install and run the program.
+The program was developed by the ddos cats team. Links to their Telegram channel. Just follow the instructions, install the program and open it on your computer.
+Importantly! Don&#x27;t forget about the enabled VPN! It is not advisable to use Tor Browser here!</li></ol><ol type="1" id="cd0c8b36-1130-417e-87a4-98658acbfb0a" class="numbered-list" start="4"><li><a href="https://docs.google.com/document/d/1onvSrNu1FnNKDHD0Mtwf0KoOSuZJOClHqHOs5cu20Mc/preview?pru=AAABf3QiHzs*VsJeiW7py2_wmCFSxmgqpw">DB1000N</a>
+Similar to the previous program attacks a certain list of sites that
+independently changes dynamically.
+The program was developed by the DDOS team in the country of SEPARIV (Cyber-Cossacks). Links to their Telegram channel. Just follow the instructions, install the program and open it on your computer.
+Importantly! Don&#x27;t forget about the enabled VPN! It is not advisable to use Tor Browser here!</li></ol><ol type="1" id="be2a6b47-399d-48ba-8417-6a892138ac9d" class="numbered-list" start="5"><li><a href="https://playforukraine.live/">https://playforukraine.live/</a>
+And they even created it! A game that can be played in the browser, and your every move
+attacks one of the Russian sites.
+Importantly! Don&#x27;t forget the enabled VPN, which you need to change from time to time, or Tor Browser, which you need to change from time to time!</li></ol><ol type="1" id="40cc7d5f-3eda-4ade-9c77-d53b1cc24989" class="numbered-list" start="6"><li><a href="https://playforukraine.live/">https://playforukraine.live/</a>
+And they even created it! A game that can be played in the browser, and your every move
+attacks one of the Russian sites.
+Importantly! Don&#x27;t forget the enabled VPN, which you need to change from time to time, or Tor Browser, which you need to change from time to time!</li></ol><ol type="1" id="661cd749-df0e-4d9b-8ebb-808f357c7f2d" class="numbered-list" start="7"><li><a href="https://cyber-yozh.com/">https://cyber-yozh.com/</a>
+Attacks the standard list of Russian sites.
+Another site developed by the Zion team. Links to their Telegram channel.
+Importantly! Don&#x27;t forget the enabled VPN, which you need to change from time to time, or Tor Browser, which you need to change from time to time!</li></ol><p id="4533a2c8-e1d7-4abb-afa0-1179f8373b48" class="">
+</p><p id="b83b4c08-d9c3-4d30-b2c8-553d6425df5f" class=""><strong>Attack: simple level</strong>
+For greater maneuver of personal actions of the attacker, you can use ready-made programs that are quite easy to use.</p><ol type="1" id="98713bd0-8d49-4e8a-acbe-0e94704e139c" class="numbered-list" start="1"><li>HelloWorld
+• Use this link to download this program.
+• Next, download the archive and unzip it to the folder of the same name.
+• Go inside the folder and simply transfer it to the “ukraine.txt” file
+sites we want to attack (each site on a new line, example in the screen below).</li></ol><ol type="1" id="ccc2a762-8563-4653-aa2f-f16dbee71d0f" class="numbered-list" start="2"><li><figure id="b65f26e3-0f4c-4ea3-88c1-ececcbddda23" class="image"><a href="DDOS%20Tutor%20b65f2/%D0%A1%D0%BD%D0%B8%D0%BC%D0%BE%D0%BA_%D1%8D%D0%BA%D1%80%D0%B0%D0%BD%D0%B0_2022-03-06_%D0%B2_15.53.05.png"><img style="width:1894px" src="DDOS%20Tutor%20b65f2/%D0%A1%D0%BD%D0%B8%D0%BC%D0%BE%D0%BA_%D1%8D%D0%BA%D1%80%D0%B0%D0%BD%D0%B0_2022-03-06_%D0%B2_15.53.05.png"/></a></figure><p id="2e1d3e0a-0bf5-47f0-9c64-ca6a008c8b4a" class="">
+</p><p id="2e7a4f96-f514-4e77-baf2-1450ebf2fde1" class="">If you have Windows, just run pray_ukraine_windows.exe, a separate window will open, as shown in the screen below, and enjoy the collapse of the Russian Federation.</p><figure id="3c7eb3ff-77c9-4a2f-b95f-725e6a69b38f" class="image"><a href="DDOS%20Tutor%20b65f2/%D0%A1%D0%BD%D0%B8%D0%BC%D0%BE%D0%BA_%D1%8D%D0%BA%D1%80%D0%B0%D0%BD%D0%B0_2022-03-06_%D0%B2_15.54.15.png"><img style="width:1918px" src="DDOS%20Tutor%20b65f2/%D0%A1%D0%BD%D0%B8%D0%BC%D0%BE%D0%BA_%D1%8D%D0%BA%D1%80%D0%B0%D0%BD%D0%B0_2022-03-06_%D0%B2_15.54.15.png"/></a></figure><ul id="996e0dc7-30ee-46d2-9254-e23663cdd097" class="bulleted-list"><li style="list-style-type:disc">If you have Linux or MacOS, we do the following:
+o open SystemPreference -&gt; Security &amp; Privacy -&gt; Privacy -&gt;
+Developer Tool -&gt; Enable Terminal
+o open the Terminal inside the folder where the file is located
+pray_ukraine_mac, or open the Terminal and just go
+in the folder where the file pray_ukraine_mac o prescribe commands:
+▪ chmod + x pray_ukraine_mac
+▪ sudo ./pray_ukraine_mac o enjoy the collapse of the Russian Federation</li></ul><p id="6ceccc3f-9c6d-4d6c-b639-ee0766c3e985" class="">The program was developed by the Telegram channel Pogantsi (Fire show). <a href="https://t.me/+HcPbYZUcX_1iODhi">Links to their Telegram channel.</a>
+Importantly! Don&#x27;t forget about the enabled VPN, which needs to be changed from time to time.</p><p id="684589e3-79b8-4c1a-84e6-4dd8ed01d248" class="">
+</p><p id="832dc4cc-4445-46db-b39b-39c00345c2da" class="">2. LOIC
+</p><p id="56105e4d-f816-4d8f-ba65-694e94ee9b79" class=""><mark class="highlight-red">Warning! </mark>For Windows users only!
+• Use this <a href="https://github.com/thehackingsage/ddos/blob/master/Attack%20Tools/Windows/LOIC/LOIC_2.0.0.4-1.zip">link</a> to download this program.</p><figure id="20af85d7-731e-4ad1-9c8f-d2c4caee77a6" class="image"><a href="DDOS%20Tutor%20b65f2/%D0%A1%D0%BD%D0%B8%D0%BC%D0%BE%D0%BA_%D1%8D%D0%BA%D1%80%D0%B0%D0%BD%D0%B0_2022-03-06_%D0%B2_15.58.31.png"><img style="width:2936px" src="DDOS%20Tutor%20b65f2/%D0%A1%D0%BD%D0%B8%D0%BC%D0%BE%D0%BA_%D1%8D%D0%BA%D1%80%D0%B0%D0%BD%D0%B0_2022-03-06_%D0%B2_15.58.31.png"/></a></figure><p id="c6acfb72-a5ed-49df-8024-262168a32b81" class="">It may be that your computer may block the download of this archive, so you can disable the antivirus (at your own risk!) While downloading and installing this program. However, after installation, be sure to enable antivirus, it should not quarrel with this program.</p><p id="534b954e-d3b5-49b7-a868-0533736d1a2a" class="">Unzip the archive to any separate folder.
+• Inside it run the file LOIC.exe</p><figure id="cc6578bf-0567-40e0-9f25-d0e5872e5d79" class="image"><a href="DDOS%20Tutor%20b65f2/%D0%A1%D0%BD%D0%B8%D0%BC%D0%BE%D0%BA_%D1%8D%D0%BA%D1%80%D0%B0%D0%BD%D0%B0_2022-03-06_%D0%B2_16.02.09.png"><img style="width:2646px" src="DDOS%20Tutor%20b65f2/%D0%A1%D0%BD%D0%B8%D0%BC%D0%BE%D0%BA_%D1%8D%D0%BA%D1%80%D0%B0%D0%BD%D0%B0_2022-03-06_%D0%B2_16.02.09.png"/></a></figure><p id="a75ea329-f01a-45c3-be42-c3c61633f776" class="">Then either in the URL field pass the physical address of the site we want to attack (for example, <a href="https://interfax.ru/">https://interfax.ru/</a>) and click Lock on, or in the IP field pass the IP address of the site and click Lock on (as shown in the screen above) ).</p><p id="6e34cf9a-6b72-45e5-ac48-a4c0f0cec9af" class="">In the TCP / UDP message field, add any message you want to convey to Russia. It is recommended that you change it each time you change your IP address.
+• Set the Speed slider either to the left or a little closer to the center on the left (as shown in the screen above).
+• Next, select Method (TCP, HTTP or UDP). In most Telegram channels that publish some targets for the attack, a specific method is already specified, then we just choose it.
+• Next, select the port in the Port field (the field next to the Method field, not the one at the top, at the top of the Port we leave the default and equal to 6667). The port is what is indicated after the colon in the IP address, for example, for 84.201.176.124:22 port is the number 22. In most Telegram channels that publish some targets for the attack already specified specific port, then just choose it.
+• Important! If Method and Port are not specified, try standard ports and methods for sites. For example, TCP and 443, TCP and 22, HTTP and 80, other options are possible.
+• In the Threads field, select the maximum possible number that your computer allows without making a mistake. Start with 200, then 100 and so on. In my case, it&#x27;s 99.
+• All other fields are left unchanged.
+• Press the IMMA CHARGIN MAH LAZER button and enjoy
+the collapse of the Russian Federation.
+• How to understand that everything works? If the number is greatly increased
+Requested and appear Failed (screen below), then you are doing everything right, so keep it up.</p><figure id="470a2070-9d09-4870-b939-26915bc0fdbc" class="image"><a href="DDOS%20Tutor%20b65f2/%D0%A1%D0%BD%D0%B8%D0%BC%D0%BE%D0%BA_%D1%8D%D0%BA%D1%80%D0%B0%D0%BD%D0%B0_2022-03-06_%D0%B2_16.03.54.png"><img style="width:2264px" src="DDOS%20Tutor%20b65f2/%D0%A1%D0%BD%D0%B8%D0%BC%D0%BE%D0%BA_%D1%8D%D0%BA%D1%80%D0%B0%D0%BD%D0%B0_2022-03-06_%D0%B2_16.03.54.png"/></a></figure><p id="1c0c432b-e758-4bd5-8c96-451ca026ff49" class="">Importantly! Don&#x27;t forget about the enabled VPN, which needs to be changed from time to time.</p><p id="a5501e59-068d-41b8-8f22-290042a34cd8" class="">
+</p><p id="4e398d10-f642-4d5a-8224-cc3c7fb89ce8" class=""><strong>Attack: Intermediate</strong></p><p id="d2e13a91-f9e0-454e-973c-c08045f905ed" class=""><strong>
+</strong>For those who understand how to install and run Docker, there are many ready-made scripts that are fairly easy to run from a local or virtual machine.
+Here is a <a href="https://www.notion.so/DDoS-1505b74f6f8443768dc47e0f4d2ee8b2">link</a> to a tutorial on how to install Docker on different operating systems and how to run a specific script on Docker.
+Everything is written in the DdoS Instructions.
+There are also other options in Used Sources and Tutorials on how to run scripts with DDOS attacks using other Docker containers, scripts written in Python and other programming languages.
+This tutorial was compiled by the DDOS team for the country of SEPARS (Cyber-Cossacks). <a href="https://t.me/+WtXLrVUjtEs5NWUy">Links to their Telegram channel.</a>
+Importantly! Before you run commands to attack a resource, you can check the availability of that resource with the following commands:
+• curl <a href="http://213.24.76.25:1935/tcp">http://213.24.76.25:1935/tcp</a> -I (for IP)
+• curl <a href="https://scr.online.sberbank.ru/api/fl/idgib-w-3ds">https://scr.online.sberbank.ru/api/fl/idgib-w-3ds</a> -I (at)
+Importantly! If you attack from a local machine, don&#x27;t forget about the enabled VPN, which needs to be changed from time to time.</p><p id="822099dc-dbcc-42ba-9ce4-6e990318fe0b" class="">
+</p><p id="72ff42d0-36d1-4644-a447-f94ed875dce8" class=""><strong>Attack: advanced level </strong></p><p id="8b25c2eb-7d67-44eb-ad46-e8c4b1c6d2cb" class="">
+With the help of Docker, Docker containers and other scripts on special services, you can deploy many virtual machines on which you can run a large number of DDOS-attacks.
+Below are tutorials on how to deploy such virtual machines to AWS, Digital Ocean, Azure and Google Cloud.</p><ul id="24994114-18bf-4a37-8319-07088ef40c10" class="bulleted-list"><li style="list-style-type:disc"><a href="https://telegra.ph/DDOS-SEPAR-02-26">DDOS on AWS</a></li></ul><ul id="28a7784c-884b-4768-aa26-8b8148105d14" class="bulleted-list"><li style="list-style-type:disc"><a href="https://dou.ua/forums/topic/36825/?from=tg-tech&amp;utm_source=telegram&amp;utm_medium=social">DDOS on AWS 2</a></li></ul><ul id="3c584cee-f9c2-42c4-86c8-619b2e3e60c5" class="bulleted-list"><li style="list-style-type:disc"><a href="https://www.youtube.com/c/OktenWebUniversITy-BigBird/videos">DDOS on AWS (videos)</a></li></ul><ul id="9b3099fe-8e64-49f1-86b7-784f3818c78c" class="bulleted-list"><li style="list-style-type:disc"><a href="https://telegra.ph/Digital-Ocean-02-27">DDOS on Digital Ocean</a></li></ul><ul id="198b23da-b394-4874-99a9-8b34e7861988" class="bulleted-list"><li style="list-style-type:disc"><a href="https://telegra.ph/YAk-orenduvati-servak-dlya-ddosu-na-platform%D1%96-Digital-Ocean-03-02">DDOS on Digital Ocean 2</a></li></ul><ul id="a5bea806-fb14-4504-969c-059dcd7eeb23" class="bulleted-list"><li style="list-style-type:disc"><a href="https://dou.ua/forums/topic/36795/?from=tg&amp;utm_source=telegram&amp;utm_medium=social">DDOS on Azure</a></li></ul><ul id="f16c836b-cb79-4dc9-ab7f-79a867bdfcb7" class="bulleted-list"><li style="list-style-type:disc"><a href="https://telegra.ph/%D0%86nstrukc%D1%96ya-yak-DDositi-sajti-za-dopomogoyu-server%D1%96v-02-26">DDOS on Google Cloud</a></li></ul><ul id="a616f253-cfe6-48b2-83ac-4ecb00dac567" class="bulleted-list"><li style="list-style-type:disc"><a href="https://www.youtube.com/watch?v=VHdDibLYrjY">DDOS on Google Cloud (video)</a></li></ul><p id="0709a1c5-1cc1-4785-aee0-742d64ecf75a" class="">
+</p><p id="0287585d-c25b-4d5b-aa08-93c218af207a" class="">
+</p><p id="c739f492-43f8-4acf-8468-b6dd1bb74832" class=""><strong>Check the result of DDOS attacks</strong></p><p id="a3c7fbcb-5ac1-4d72-90e2-4a555c30883f" class="">
+Everyone who attacks would like to monitor the progress of their attacks, whether they make any sense at all and whether they work.
+Below are two services where you can pass either the physical address of the site (for example, <a href="https://interfax.ru/">https://interfax.ru/</a>), or IP-address with the port (for example, 84.201.176.124:22).
+• <a href="https://port.ping.pe/">https://port.ping.pe</a>
+• <a href="https://check-host.net/check-http">https://check-host.net/check-http</a>
+There is also a site where you can use the IP address to find all the necessary information about this IP address, such as: open ports (see Port Scanner), or whether the site is pinged or not (see Ping):
+• <a href="https://viewdns.info/">https://viewdns.info/</a></p><p id="7ce196bd-3441-407e-858b-2bdddc25d891" class="">
+</p><p id="5b226232-6977-406b-b4df-e7533126146f" class="">
+</p><p id="51e6ecd3-29e2-4604-95e3-702e47e03924" class=""><strong>Additional resources Telegram channels (DDOS related):</strong></p><ul id="a46ba857-8963-475d-990a-5f14980abd57" class="bulleted-list"><li style="list-style-type:disc"><a href="https://t.me/+WtXLrVUjtEs5NWUy">DDOS по країні СЕПАРІВ (Кібер-Козаки)</a></li></ul><ul id="044633c0-5bad-46a9-860c-7d296c41d213" class="bulleted-list"><li style="list-style-type:disc"><a href="https://t.me/ddosKotyky">ddos котики</a></li></ul><ul id="03341fc3-5cc7-419b-a90c-1ad755f6f4ce" class="bulleted-list"><li style="list-style-type:disc"><a href="https://t.me/+NdmAn-xnANNlYjJi">KiberBULL</a></li></ul><ul id="d57b401f-8e81-4800-b0c6-9544c9b541bc" class="bulleted-list"><li style="list-style-type:disc"><a href="https://t.me/+HcPbYZUcX_1iODhi">Поганці (Fire show)</a></li></ul><ul id="39323a5f-7894-4306-beaf-90bc75946c67" class="bulleted-list"><li style="list-style-type:disc"><a href="https://t.me/totkotkras">Zion</a></li></ul><p id="c74e521d-8ac0-45cf-ae91-3b0a25f254f7" class="">
+</p><p id="c40c3f84-18e4-4074-8b4c-79f48331ed6e" class="">Telegram channels (other):
+<a href="https://t.me/itarmyofukraine2022">• IT ARMY of Ukraine
+</a>•<a href="https://t.me/+Xl_XZuwY_qBiYWYy"> Anti-Putin Hackathon </a>(Various projects to defeat the occupier)
+<a href="https://t.me/dataleaksua">• DataLeaks</a> (Leaks from various Russian databases)
+Website with all the necessary information about Ukraine during the war:
+<a href="https://viyna.net/">https://viyna.net/</a>
+Slack channel with various projects for people in the field of IT (in order to be moderated you need to have a working LinkedIn account):
+<a href="https://join.slack.com/t/uatechpower/shared_invite/zt-14n274f8w-VNhXxzYpr5AeIA5SU7lM3g">UA Tech Power
+</a><a href="https://docs.google.com/spreadsheets/d/1TlWTY9jxtyyb1H3AGt4QiQo17MGEUSE4LOl7vgynwxg/htmlview?fbclid=IwAR03TK3djga1TiM7CRoRLPgoXowINjWAgyAwlxb_A892Y9csfoCts-zgnaQ">Resources for DDOS attacks
+</a>Personal data of Russian users:
+<a href="https://itarmy.to/">IT ARMY Leaks</a></p><p id="9e69bdef-db3b-450d-802d-0f741f20d6a0" class="">
+</p><p id="13a6ebc2-a867-4f66-92b4-701eee489e48" class=""><strong>Afterword</strong>
+If you have any questions, please contact <a href="https://t.me/+WSed-7udmZs0YjMy">this Telegram channel</a> and write your questions in the comments below the post.
+Warning!
+• You choose whether to carry out attacks on Russian sites or not!
+• The author of this manual is not responsible for its use
+instructions!
+• Glory to Ukraine!
+• Russian warship, go nah * y!</p></li></ol></div></article></body></html>
